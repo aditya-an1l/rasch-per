@@ -1,0 +1,82 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rasch-per"
+version = "0.1.0"
+description = "Rasch model and CTT psychometric analysis for education research"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Aditya Anil", email = "aditya.anil.productions@gmail.com" }]
+keywords = [
+    "psychometrics",
+    "rasch",
+    "item response theory",
+    "education research",
+    "physics education research",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+    "jinja2>=3.1",
+    "typer>=0.9",
+]
+
+[project.optional-dependencies]
+pdf = ["weasyprint"]
+cfa = ["semopy"]
+dev = ["pytest", "pytest-cov", "ruff", "mypy"]
+
+[project.scripts]
+rasch-per = "rasch_per.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/aditya-an1l/rasch-per"
+Repository = "https://github.com/aditya-an1l/rasch-per"
+Issues = "https://github.com/aditya-an1l/rasch-per/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rasch_per"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "NPY", "PD"]
+# B008: typer's API requires call-in-default (typer.Option/typer.Argument).
+ignore = ["B008"]
+
+[tool.mypy]
+python_version = "3.10"
+mypy_path = "src"
+files = ["src"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["matplotlib.*", "jinja2.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

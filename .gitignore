@@ -1,0 +1,27 @@
+# FirstHQ workflow files (never commit)
+docs/
+AGENT.md
+CONTEXT.json
+TODO.md
+update.md
+log.md
+.opencode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/

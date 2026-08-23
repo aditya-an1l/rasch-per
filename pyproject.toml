@@ -41,7 +41,7 @@ dependencies = [
 [project.optional-dependencies]
 pdf = ["weasyprint"]
 cfa = ["semopy"]
-dev = ["pytest", "pytest-cov", "ruff", "mypy", "pandas-stubs"]
+dev = ["pytest", "pytest-cov", "ruff", "mypy", "pandas-stubs", "scipy-stubs"]
 
 [project.scripts]
 rasch-per = "rasch_per.cli:app"

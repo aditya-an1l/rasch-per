@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from rasch_per.ctt import CTTAnalysis, CTTResults
+from rasch_per.data import ResponseData
+
 __version__ = "0.1.0"
 
-__all__ = ["__version__"]
+__all__ = ["CTTAnalysis", "CTTResults", "ResponseData", "__version__"]

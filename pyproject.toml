@@ -41,7 +41,7 @@ dependencies = [
 [project.optional-dependencies]
 pdf = ["weasyprint"]
 cfa = ["semopy"]
-dev = ["pytest", "pytest-cov", "ruff", "mypy"]
+dev = ["pytest", "pytest-cov", "ruff", "mypy", "pandas-stubs"]
 
 [project.scripts]
 rasch-per = "rasch_per.cli:app"
@@ -65,7 +65,10 @@ select = ["E", "F", "W", "I", "UP", "B", "SIM", "NPY", "PD"]
 ignore = ["B008"]
 
 [tool.mypy]
-python_version = "3.10"
+# Type-check against the newest supported grammar: current numpy stubs use
+# `type` statements that require a 3.12+ checker even though we support 3.10
+# at runtime (the CI test matrix covers 3.10-3.13).
+python_version = "3.12"
 mypy_path = "src"
 files = ["src"]
 warn_unused_ignores = true

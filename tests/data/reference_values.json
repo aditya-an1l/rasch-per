@@ -1,0 +1,16 @@
+{
+  "_comment": "Hand-computed reference values for the 5-person x 3-item toy matrix in synthetic_small.csv. Computed by hand per the formulas in the project spec (section 6.1); see tests/test_ctt.py. Note: discrimination correlates each item with its REST score (total minus that item).",
+  "toy_matrix": [[1, 1, 1], [1, 0, 1], [1, 0, 0], [0, 0, 0], [0, 0, 0]],
+  "_hand_work": {
+    "totals": [3, 2, 1, 0, 0],
+    "rest_q1": [2, 1, 0, 0, 0],
+    "rest_q2": [2, 2, 1, 0, 0],
+    "rest_q3": [2, 1, 1, 0, 0],
+    "alpha": "3/2 * (1 - 0.8/1.7) = 27/34",
+    "ferguson": "(25 - (1+1+1+4)) / (25 - 25/4) = 18/18.75"
+  },
+  "item_difficulties": [0.6, 0.2, 0.4],
+  "item_discriminations": [0.6123724356957945, 0.5590169943749475, 0.7637626158259733],
+  "cronbach_alpha": 0.7941176470588235,
+  "ferguson_delta": 0.96
+}

@@ -24,8 +24,11 @@ jobs:
           path: dist/
 
   publish-testpypi:
-    # Sanity-check install on every push to main.
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')
+    # Requires Trusted Publishing configured on testpypi.org for this repo
+    # (manual one-time setup, done in Phase 7). Until then, opt in by setting
+    # the repository variable ENABLE_TESTPYPI_PUBLISH=true; the job skips
+    # otherwise so pushes to main stay green.
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') && vars.ENABLE_TESTPYPI_PUBLISH == 'true'
     needs: build
     runs-on: ubuntu-latest
     environment: testpypi

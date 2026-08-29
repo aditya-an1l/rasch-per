@@ -13,6 +13,8 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+site/
+.mkdocs_cache/
 .venv/
 .mypy_cache/
 .ruff_cache/

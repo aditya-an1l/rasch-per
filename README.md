@@ -121,6 +121,23 @@ synthetic data from the package's own simulator.
 - Optional analyses (PDF export, CFA, Stocking-Lord linking, R cross-validation)
   live in `scripts/` and use the `pdf` / `cfa` extras where needed.
 
+## Screenshots
+
+Key diagnostic plots produced by the package's plotting API on simulated data
+(500 persons, 20 items, seed 42):
+
+| Plot | Description |
+|------|-------------|
+| ![Wright map](images/wright_map.png) | Person ability vs item difficulty (Wright map) |
+| ![Test information](images/test_information.png) | Test information and standard error of measurement across the ability scale |
+| ![ICC](images/icc.png) | Item characteristic curve with empirical overlay (item 1) |
+| ![Item difficulty](images/item_difficulty.png) | CTT item difficulty with bootstrap standard-error bars |
+| ![Item discrimination](images/item_discrimination.png) | CTT item point-biserial discrimination |
+| ![DIF contrasts](images/dif_contrasts.png) | DIF contrasts with ETS A/B/C classification |
+
+The figures are generated from `simulate_rasch_data` and the analysis pipeline
+(CTT, Rasch MML, DIF).
+
 ## Development
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Validation loop: `./.validation.sh`.

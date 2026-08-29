@@ -69,5 +69,5 @@ generate_report(
 
 ## Worked notebooks
 
-- `examples/notebooks/quickstart.ipynb` - core workflow end to end.
-- `examples/notebooks/report_walkthrough.ipynb` - DIF analysis and report.
+- [quickstart.ipynb](https://github.com/aditya-an1l/rasch-per/blob/main/examples/notebooks/quickstart.ipynb) - core workflow end to end.
+- [report_walkthrough.ipynb](https://github.com/aditya-an1l/rasch-per/blob/main/examples/notebooks/report_walkthrough.ipynb) - DIF analysis and report.

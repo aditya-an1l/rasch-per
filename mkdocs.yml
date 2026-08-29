@@ -17,7 +17,11 @@ theme:
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
+  - CLI Reference: cli.md
+  - Methodology: methodology.md
+  - Validity Report: report.md
   - API Reference: api.md
+  - Contributing: contributing.md
 
 markdown_extensions:
   - admonition

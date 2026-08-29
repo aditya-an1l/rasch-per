@@ -1,0 +1,27 @@
+site_name: rasch-per
+site_description: Rasch model and Classical Test Theory (CTT) psychometric analysis for education research
+docs_dir: docsrc
+repo_url: https://github.com/aditya-an1l/rasch-per
+repo_name: aditya-an1l/rasch-per
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - API Reference: api.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - toc:
+      permalink: true

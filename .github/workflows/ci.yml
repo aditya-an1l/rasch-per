@@ -27,10 +27,10 @@ jobs:
           ruff format --check .
       - name: Type check
         run: mypy
-      - name: Test with coverage report
-        # Coverage gate (cov-fail-under=85) returns in Phase 6 once the
-        # library modules are implemented; scaffolding stubs sit at ~17%.
-        run: pytest --cov=rasch_per --cov-report=xml
+      - name: Test with coverage gate
+        # Coverage gate (85%) is enforced now that the library modules are
+        # implemented (Phases 0-5).
+        run: pytest --cov=rasch_per --cov-fail-under=85 --cov-report=xml
       - name: Upload coverage
         if: matrix.python-version == '3.13'
         uses: actions/upload-artifact@v4

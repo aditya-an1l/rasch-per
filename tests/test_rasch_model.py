@@ -87,6 +87,8 @@ class TestRaschModelFacade:
         with pytest.raises(ValueError, match="MML"):
             RaschModel().fit(ResponseData(df.drop(columns=["item_1"])), estimator="BOGUS")
 
-    def test_fit_statistics_not_until_phase_3(self, fitted: RaschModel) -> None:
-        with pytest.raises(NotImplementedError, match="Phase 3"):
-            fitted.fit_statistics()
+    def test_fit_statistics_returns_infit_outfit(self, fitted: RaschModel) -> None:
+        fit = fitted.fit_statistics()
+        assert list(fit.columns) == ["infit", "outfit"]
+        assert list(fit.index) == [f"item_{i}" for i in range(1, 9)]
+        assert fit.to_numpy().shape == (8, 2)

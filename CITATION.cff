@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: rasch-per
+abstract: >-
+  Rasch model and Classical Test Theory (CTT) psychometric analysis for
+  education research, built for physics / STEM / discipline-based education
+  researchers (PER / DBER). Provides person abilities, item difficulties,
+  fit statistics, dimensionality checks, differential item functioning (DIF)
+  analysis, and a self-contained HTML validity report from dichotomous
+  item-response data.
+authors:
+  - family-names: Anil
+    given-names: Aditya
+    email: aditya.anil.productions@gmail.com
+repository-code: "https://github.com/aditya-an1l/rasch-per"
+url: "https://github.com/aditya-an1l/rasch-per"
+license: MIT
+version: 0.1.0
+date-released: 2026-08-27
+keywords:
+  - psychometrics
+  - rasch
+  - item response theory
+  - education research
+  - physics education research

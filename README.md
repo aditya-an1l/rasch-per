@@ -1,17 +1,17 @@
 # rasch-per
 
 Rasch model and Classical Test Theory (CTT) psychometric analysis for
-education research - built for physics/STEM/discipline-based education
-researchers (PER/DBER).
+education research, built for physics / STEM / discipline-based education
+researchers (PER / DBER).
 
 Feed it a CSV of dichotomous (0/1) item responses and get person abilities,
 item difficulties, fit statistics, dimensionality checks, DIF analysis, and a
 full self-contained HTML validity report.
 
-> Status: early scaffolding. The API below is the target design and is being
-> implemented phase by phase.
+Status: implemented and validated (119 tests, ~97% coverage). The library is
+Beta; the public API is stable for the analyses listed below.
 
-## Quickstart (target)
+## Quickstart (CLI)
 
 ```bash
 pip install rasch-per
@@ -19,27 +19,65 @@ rasch-per simulate --output demo.csv
 rasch-per analyze demo.csv --output report.html
 ```
 
-## Python API (target)
+`simulate` writes a synthetic response CSV (with a `person_id` index). `analyze`
+reads it back (the first column is the person index), runs the full pipeline,
+and writes a self-contained HTML report.
+
+```bash
+# With differential item functioning (DIF) by a group column
+rasch-per analyze demo.csv --groups groups.csv --dif-group gender \
+    --reference Man --focal Non-man --output report.html
+```
+
+## Python API
 
 ```python
 import pandas as pd
-from rasch_per import ResponseData, CTTAnalysis, RaschModel, DIFAnalysis, generate_report
+from rasch_per import (
+    ResponseData,
+    CTTAnalysis,
+    RaschModel,
+    DIFAnalysis,
+    generate_report,
+)
 
-data = ResponseData.from_csv("responses.csv")
+# Load a response matrix (persons as rows, items as columns)
+df = pd.read_csv("responses.csv", index_col=0)
+data = ResponseData(df)
 
+# Classical Test Theory
 ctt = CTTAnalysis(data).run()
 print(ctt.summary())
+print(ctt.reliability.cronbach_alpha)  # attribute, not a method
 
-rasch = RaschModel().fit(data, estimator="MML")
-print(rasch.item_difficulties)
-print(rasch.fit_statistics())
+# Rasch (MML is the default estimator)
+model = RaschModel().fit(data, estimator="MML")
+print(model.item_difficulties)  # pandas Series indexed by item name
+print(model.fit_statistics())  # infit / outfit mean-squares
 
-groups = pd.read_csv("groups.csv")  # person_id, gender
-dif = DIFAnalysis(rasch, groups=groups["gender"], reference="Man", focal="Non-man").run()
-print(dif.summary())
+# Differential Item Functioning
+groups = pd.read_csv("groups.csv", index_col=0)["gender"].reindex(data.person_ids)
+dif = DIFAnalysis(model, groups=groups.to_numpy(), reference="Man", focal="Non-man").analyze()
+print(dif.summary())  # ETS delta classification + BH flags
 
-generate_report(data, output="validity_report.html")
+# Self-contained HTML validity report
+generate_report(
+    df,
+    output="validity_report.html",
+    groups=groups.to_numpy(),
+    reference="Man",
+    focal="Non-man",
+)
 ```
+
+Notes on the API:
+
+- `generate_report` takes a `pandas.DataFrame`, not a `ResponseData`. When you
+  pass `groups`, they must be aligned to the DataFrame's row order (here, the
+  person index).
+- `CTTResults.reliability` is an attribute (`cronbach_alpha`, `mcdonald_omega`,
+  `ferguson_delta`), not a callable.
+- `DIFAnalysis` is run with `.analyze()` (it returns a `DIFResults`).
 
 ## What's inside
 
@@ -57,7 +95,7 @@ generate_report(data, output="validity_report.html")
 ## Methodology & References
 
 This package implements standard, published psychometric methods used
-throughout physics/discipline-based education research:
+throughout physics / discipline-based education research:
 
 - Rasch model (Rasch, 1960; Wright & Stone, 1979)
 - Joint and marginal maximum likelihood estimation (e.g., as in R packages
@@ -73,6 +111,15 @@ throughout physics/discipline-based education research:
 
 No third-party assessment content or data is included; all examples use
 synthetic data from the package's own simulator.
+
+## Documentation & Examples
+
+- API and usage docs: `mkdocs serve` (source in `docsrc/`, requires the
+  `docs` extra: `pip install "rasch-per[docs]"`).
+- Worked notebooks: `examples/notebooks/quickstart.ipynb` and
+  `examples/notebooks/report_walkthrough.ipynb`.
+- Optional analyses (PDF export, CFA, Stocking-Lord linking, R cross-validation)
+  live in `scripts/` and use the `pdf` / `cfa` extras where needed.
 
 ## Development
 

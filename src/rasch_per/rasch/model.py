@@ -95,6 +95,7 @@ class RaschModel:
         self._result: EstimationResult | None = None
         self._item_names: list[str] = []
         self._person_ids: list = []
+        self._matrix: np.ndarray | None = None
 
     def fit(
         self,
@@ -138,6 +139,7 @@ class RaschModel:
         else:
             raise ValueError(f"Unknown estimator {estimator!r}; use 'MML' or 'JML'")
         self._result = result
+        self._matrix = matrix
         self._item_names = response_data.item_names
         self._person_ids = response_data.person_ids
         return self
@@ -168,6 +170,30 @@ class RaschModel:
             "person_ability": pd.Series(result.se_theta, index=self._person_ids, name="se_theta"),
         }
 
+    @property
+    def responses(self) -> np.ndarray:
+        """Response matrix used in the most recent :meth:`fit` (float, NaN missing)."""
+        if self._matrix is None:
+            raise RuntimeError("Call .fit() before accessing responses")
+        return self._matrix
+
+    @property
+    def item_names(self) -> list[str]:
+        """Item names from the data used in the most recent :meth:`fit`."""
+        if not self._item_names:
+            raise RuntimeError("Call .fit() before accessing item_names")
+        return list(self._item_names)
+
     def fit_statistics(self) -> pd.DataFrame:
-        """Infit/outfit fit statistics per item (implemented in Phase 3)."""
-        raise NotImplementedError("fit_statistics is implemented in Phase 3")
+        """Per-item infit and outfit mean-square fit statistics.
+
+        Returns a DataFrame indexed by item name with ``infit`` and ``outfit``
+        columns (see :func:`rasch_per.rasch.fit.infit_outfit`).
+
+        Returns
+        -------
+        pandas.DataFrame
+        """
+        from rasch_per.rasch.fit import infit_outfit
+
+        return infit_outfit(self)

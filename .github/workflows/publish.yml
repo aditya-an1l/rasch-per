@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     tags: ["v*.*.*"]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,11 +25,12 @@ jobs:
           path: dist/
 
   publish-testpypi:
-    # Requires Trusted Publishing configured on testpypi.org for this repo
-    # (manual one-time setup, done in Phase 7). Until then, opt in by setting
-    # the repository variable ENABLE_TESTPYPI_PUBLISH=true; the job skips
-    # otherwise so pushes to main stay green.
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main') && vars.ENABLE_TESTPYPI_PUBLISH == 'true'
+    # Publish to TestPyPI on version tags (v*.*.*) or manual dispatch only -
+    # NOT on routine pushes to main, so an unrelated commit never triggers a
+    # publish and fails on a duplicate version. Requires Trusted Publishing
+    # configured on testpypi.org for this repo (manual one-time setup, Phase 7);
+    # until then opt in via the ENABLE_TESTPYPI_PUBLISH repo variable.
+    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || github.event_name == 'workflow_dispatch'
     needs: build
     runs-on: ubuntu-latest
     environment: testpypi
@@ -43,9 +45,10 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
 
   publish-pypi:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || github.event_name == 'workflow_dispatch'
     needs: build
     runs-on: ubuntu-latest
     environment: pypi
@@ -58,3 +61,5 @@ jobs:
           path: dist/
       - name: Publish to PyPI (Trusted Publisher)
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
